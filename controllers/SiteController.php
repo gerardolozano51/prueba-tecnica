@@ -164,9 +164,6 @@ class SiteController extends Controller
                     'pageSize' => 20,
                 ],
             ]);
-            return $this->render('users', [
-                'data' => $dataProvider,
-            ]);
 
             return $this->render('users', [
                 'data' => $dataProvider,
@@ -176,6 +173,27 @@ class SiteController extends Controller
         return $this->render('edit_user', [
             'model' => $model,
 
+        ]);
+    }
+
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = User::findOne($id);
+        if ($model !== null) {
+            $model->delete();
+        }
+
+        Yii::$app->session->setFlash('warning', 'Usuario Eliminado');
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('users', [
+            'data' => $dataProvider,
         ]);
     }
 }
